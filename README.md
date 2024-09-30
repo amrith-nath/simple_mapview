@@ -1,16 +1,35 @@
-# logicart
+# Simple Map View
 
-A new Flutter project.
+A simple Flutter project to display and interact with Google Maps.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project serves as a starting point for integrating Google Maps into a Flutter application. The app demonstrates how to display a map, control its appearance, and interact with the map's features like markers, zoom controls, and user location.
 
-A few resources to get you started if this is your first Flutter project:
+### Features
+- Display Google Maps with initial camera positioning
+- Display custom markers to the map
+- Show custom location and control Marker zoom levels
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Prerequisites
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+To use Google Maps in this Flutter app, you'll need to:
+
+1. **Obtain a Google Maps API Key**:
+   - Visit the [Google Cloud Console](https://console.cloud.google.com/).
+   - Enable the **Maps SDK for Android** and **Maps SDK for iOS**.
+   - Generate and copy the API key.
+
+2. **Configure your Android and iOS projects**:
+   - For **Android**: Add your API key to the `AndroidManifest.xml` file.
+   - For **iOS**: Add your API key to the `Info.plist` file.
+
+3. **Install the required dependencies**:
+   - Add `google_maps_flutter` to your `pubspec.yaml` file and run `flutter pub get`.
+
+### Installation
+
+1. Clone this repository:
+
+   ```bash
+   git clone https://github.com/your-username/simple-map-view.git
