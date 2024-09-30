@@ -17,19 +17,16 @@ class ScreenMap extends StatefulWidget {
 }
 
 class _ScreenMapState extends State<ScreenMap> {
+  Set<Marker> markers = {};
+  List<LatLng> locations = [];
+  late LatLng selectedLocation;
+
+  late GoogleMapController mapController;
   @override
   void initState() {
     getPermissions();
     super.initState();
-  }
-
-  late GoogleMapController mapController;
-
-  final LatLng _center =
-      const LatLng(37.7749, -122.4194); // Coordinates for San Francisco
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
+    intialize();
   }
 
   @override
@@ -38,22 +35,125 @@ class _ScreenMapState extends State<ScreenMap> {
       appBar: AppBar(
         title: const Text("Map view"),
       ),
-      body: Container(
-        padding: const EdgeInsets.all(20),
-        child: GoogleMap(
-          indoorViewEnabled: false,
-          mapType: MapType.hybrid,
-          initialCameraPosition: CameraPosition(
-            target: _center,
-            zoom: 11.0,
+      body: Column(
+        children: [
+          Expanded(
+            child: Container(
+              clipBehavior: Clip.hardEdge,
+              margin:
+                  const EdgeInsets.only(bottom: 20, left: 5, right: 5, top: 10),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(12)),
+              child: GoogleMap(
+                markers: markers,
+                indoorViewEnabled: false,
+                mapType: MapType.hybrid,
+                initialCameraPosition: CameraPosition(
+                  target: selectedLocation,
+                  zoom: 11.0,
+                ),
+                onMapCreated: _onMapCreated,
+              ),
+            ),
           ),
-          onMapCreated: _onMapCreated,
-          myLocationEnabled: true,
-          myLocationButtonEnabled: true,
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _resetMap();
+        },
+        child: const Icon(Icons.refresh),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+    );
+  }
+
+////////
+  //////////////////////////////////////////////////////////////////////
+//initialize
+  intialize({bool isReset = false}) {
+    locations =
+        widget.locations.map((e) => LatLng(e.latitude, e.longitude)).toList();
+    if (!isReset) {
+      selectedLocation = locations[0];
+    }
+
+    for (int i = 0; i < locations.length; i++) {
+      markers.add(
+        Marker(
+            markerId: MarkerId('marker-$i'),
+            position: locations[i],
+            infoWindow: InfoWindow(
+              title: 'Location ${i + 1}',
+              snippet:
+                  'Lat: ${locations[i].latitude}, Lng: ${locations[i].longitude}',
+            ),
+            onTap: () {
+              _onMarkerTapped(locations[i], i);
+            }),
+      );
+    }
+  }
+
+//-------------
+  void _onMarkerTapped(LatLng position, int index) {
+    setState(() {
+      markers = {
+        Marker(
+            markerId: MarkerId('marker-$index'),
+            position: position,
+            infoWindow: InfoWindow(
+              title: 'Location ${index + 1}',
+              snippet: 'Lat: ${position.latitude}, Lng: ${position.longitude}',
+            ),
+            onTap: () {
+              selectedLocation = position;
+              mapController.animateCamera(
+                CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                    target: position,
+                    zoom: 50.0,
+                  ),
+                ),
+              );
+            }),
+      };
+    });
+    selectedLocation = position;
+    mapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: position,
+          zoom: 50.0,
         ),
       ),
     );
   }
+
+  ///////////////////////////////////////////////////////////////////////
+
+  _resetMap() {
+    setState(() {
+      intialize();
+    });
+
+    mapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: selectedLocation,
+          zoom: 0,
+        ),
+      ),
+    );
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  //////////////////////////////////////////////////////////////////////
 
   getPermissions() async {
     var status1 = await Permission.location.request();

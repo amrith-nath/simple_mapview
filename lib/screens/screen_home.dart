@@ -51,6 +51,10 @@ class ScreenHome extends StatelessWidget {
                           var location = snapshot.data![index];
 
                           return ListTile(
+                            leading: const Icon(
+                              Icons.place,
+                              color: Colors.green,
+                            ),
                             title: Text(
                               "Location $index",
                               style: const TextStyle(
@@ -67,8 +71,11 @@ class ScreenHome extends StatelessWidget {
                   }))
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.map),
+      floatingActionButton: FloatingActionButton.extended(
+          label: const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [Icon(Icons.map), Text("Google maps")],
+          ),
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
               builder: (ctx) => ScreenMap(
