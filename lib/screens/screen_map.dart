@@ -23,7 +23,6 @@ class _ScreenMapState extends State<ScreenMap> {
   late GoogleMapController mapController;
   @override
   void initState() {
-    getPermissions();
     super.initState();
     intialize();
   }
@@ -173,14 +172,4 @@ class _ScreenMapState extends State<ScreenMap> {
   }
 
   //////////////////////////////////////////////////////////////////////
-
-  getPermissions() async {
-    var status1 = await Permission.location.request();
-    var status2 = await Permission.locationAlways.request();
-
-    if (status1 == PermissionStatus.denied ||
-        status2 == PermissionStatus.denied) {
-      log("Permission denied");
-    }
-  }
 }

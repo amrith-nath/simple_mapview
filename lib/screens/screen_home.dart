@@ -15,7 +15,7 @@ class ScreenHome extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home"),
+        title: const Text("Home"),
       ),
       body: Column(
         children: [
