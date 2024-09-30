@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -34,6 +33,26 @@ class _ScreenMapState extends State<ScreenMap> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Map view"),
+        actions: [
+          Row(
+            children: [
+              const Icon(
+                Icons.place,
+                size: 16,
+                color: Colors.green,
+              ),
+              Text(
+                "Avilable Markers : ${markers.length}",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              )
+            ],
+          )
+        ],
       ),
       body: Column(
         children: [
@@ -50,7 +69,7 @@ class _ScreenMapState extends State<ScreenMap> {
                 mapType: MapType.hybrid,
                 initialCameraPosition: CameraPosition(
                   target: selectedLocation,
-                  zoom: 11.0,
+                  zoom: 0,
                 ),
                 onMapCreated: _onMapCreated,
               ),
@@ -134,7 +153,7 @@ class _ScreenMapState extends State<ScreenMap> {
 
   _resetMap() {
     setState(() {
-      intialize();
+      intialize(isReset: true);
     });
 
     mapController.animateCamera(
