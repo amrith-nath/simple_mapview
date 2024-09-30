@@ -32,4 +32,4 @@ To use Google Maps in this Flutter app, you'll need to:
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/your-username/simple-map-view.git
+   git clone https://github.com/amrith-nath/simple-map-view.git
